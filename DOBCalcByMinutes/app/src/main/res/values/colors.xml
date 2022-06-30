@@ -10,4 +10,5 @@
     <color name="textBlue">#264653</color>
     <color name="bgColor">#E9C46A</color>
     <color name="btnBgColor">#2A9D8F</color>
+    <color name="lightGrey">#B7B7A4</color>
 </resources>
