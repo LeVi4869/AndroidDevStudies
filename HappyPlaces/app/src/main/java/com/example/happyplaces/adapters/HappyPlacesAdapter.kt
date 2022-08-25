@@ -8,6 +8,8 @@ import com.example.happyplaces.models.HappyPlaceModel
 class HappyPlacesAdapter (var list : ArrayList <HappyPlaceModel> ) :
     RecyclerView.Adapter < HappyPlacesAdapter.ViewHolder > () {
 
+    private var onClickListener : OnClickListener? = null
+
     inner class ViewHolder ( binding : ItemHappyPlaceBinding) :
         RecyclerView.ViewHolder ( binding.root ) {
         val tvTitle = binding.tvTitle
@@ -22,18 +24,34 @@ class HappyPlacesAdapter (var list : ArrayList <HappyPlaceModel> ) :
         )
     }
 
-    override fun onBindViewHolder ( holder : ViewHolder, position : Int ) {
-        val model : HappyPlaceModel = list [ position ]
+    fun setOnClickListener(onClickListener: OnClickListener)    {
+        this.onClickListener = onClickListener
+    }
 
-        if ( holder is ViewHolder ) {
-            holder.ivPlaceImage.setImageURI ( Uri.parse ( model.image ) )
+    override fun onBindViewHolder ( holder : ViewHolder, position : Int ) {
+        val model: HappyPlaceModel = list[position]
+
+        if (holder is ViewHolder) {
+            holder.ivPlaceImage.setImageURI(Uri.parse(model.image))
             holder.tvTitle.text = model.title
             holder.tvDescription.text = model.description
+
+            holder.itemView.setOnClickListener{
+                if(onClickListener != null) {
+                    onClickListener!!.onClick(position, model)
+                }
+            }
         }
     }
 
     override fun getItemCount () : Int {
         return list.size
+    }
+
+    interface OnClickListener   {
+        fun onClick(position: Int, model: HappyPlaceModel){
+
+        }
     }
 
 }
