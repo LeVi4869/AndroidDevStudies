@@ -1,7 +1,12 @@
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.happyplaces.activities.AddHappyPlaceActivity
+import com.example.happyplaces.activities.MainActivity
 import com.example.happyplaces.databinding.ItemHappyPlaceBinding
 import com.example.happyplaces.models.HappyPlaceModel
 
@@ -9,6 +14,7 @@ class HappyPlacesAdapter (var list : ArrayList <HappyPlaceModel> ) :
     RecyclerView.Adapter < HappyPlacesAdapter.ViewHolder > () {
 
     private var onClickListener : OnClickListener? = null
+    private var context : Context? = null
 
     inner class ViewHolder ( binding : ItemHappyPlaceBinding) :
         RecyclerView.ViewHolder ( binding.root ) {
@@ -18,8 +24,9 @@ class HappyPlacesAdapter (var list : ArrayList <HappyPlaceModel> ) :
     }
 
     override fun onCreateViewHolder (parent : ViewGroup, viewType : Int ) : ViewHolder {
+        context = parent.context
         return ViewHolder ( ItemHappyPlaceBinding.inflate (
-            LayoutInflater.from ( parent.context ), parent, false
+            LayoutInflater.from ( context ), parent, false
         )
         )
     }
@@ -42,6 +49,13 @@ class HappyPlacesAdapter (var list : ArrayList <HappyPlaceModel> ) :
                 }
             }
         }
+    }
+
+    fun notifyEditItem(activity : Activity, position : Int, requestCode : Int){
+        val intent = Intent(context, AddHappyPlaceActivity::class.java)
+        intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, list[position])
+        activity.startActivityForResult(intent, requestCode)
+        notifyItemChanged(position)
     }
 
     override fun getItemCount () : Int {
